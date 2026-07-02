@@ -24,6 +24,12 @@
 .DS_Store
 *.pem
 
+# Claude Code internal files
+.claude/
+
+# Finder duplicates / accidental copies
+components\ 2.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*
