@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { id: "componentes",      label: "Componentes",          icon: ListIcon },
   { id: "agregar",          label: "Agregar componentes",  icon: PlusCircleIcon },
   { id: "convenciones",     label: "Convenciones",         icon: ShieldCheckIcon },
-  { id: "cursor",           label: "Usar con Cursor",      icon: MonitorIcon },
+  { id: "cursor",           label: "Claude Code y Cursor",  icon: MonitorIcon },
 ] as const
 
 type NavId = (typeof NAV_ITEMS)[number]["id"]
@@ -892,138 +892,142 @@ components/cliente/
             </div>
           </Section>
 
-          {/* ── Cursor ── */}
-          <Section id="cursor" title="Usar con Cursor">
+          {/* ── Claude Code & Cursor ── */}
+          <Section id="cursor" title="Claude Code y Cursor">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Cursor es un editor basado en VS Code con IA integrada. Puede trabajar con este proyecto, pero a diferencia de Claude Code requiere que adjuntes manualmente el contexto en cada chat.
+              El proyecto está optimizado para trabajar con IA. Puedes usar Claude Code (CLI) o Cursor (editor) — ambos leen el mismo codebase y son complementarios.
             </p>
 
-            {/* 1 — Clonar */}
-            <div className="space-y-6">
-              <StepCard step={1} title="Clonar el repositorio e instalar dependencias">
-                <CodeBlock code={`git clone https://github.com/<org>/motor-de-traccion.git
+            {/* ── Con Claude Code ── */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold">Con Claude Code</h3>
+              <p className="text-xs text-muted-foreground">
+                Claude Code es una CLI que se ejecuta desde la terminal. Lee <span className="font-mono bg-muted px-1 rounded">CLAUDE.md</span> y <span className="font-mono bg-muted px-1 rounded">AGENTS.md</span> automáticamente al arrancar, y activa el skill de shadcn en cuanto detecta <span className="font-mono bg-muted px-1 rounded">components.json</span>.
+              </p>
+              <div className="space-y-6">
+                <StepCard step={1} title="Clonar el repositorio e instalar dependencias">
+                  <CodeBlock code={`git clone https://github.com/<org>/motor-de-traccion.git
 cd motor-de-traccion
 npm install`} />
-              </StepCard>
+                </StepCard>
 
-              {/* 2 — Abrir en Cursor */}
-              <StepCard step={2} title="Abrir la carpeta en Cursor">
-                <p className="text-xs text-muted-foreground">
-                  <strong>File → Open Folder</strong> y selecciona la raíz del proyecto.
-                  También puedes hacerlo desde la terminal:
-                </p>
-                <CodeBlock code={`cursor .`} />
-              </StepCard>
+                <StepCard step={2} title="Abrir la terminal en la raíz del proyecto y correr claude">
+                  <CodeBlock code={`claude`} />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Claude Code leerá <span className="font-mono bg-muted px-1 rounded">CLAUDE.md</span> y <span className="font-mono bg-muted px-1 rounded">AGENTS.md</span> automáticamente. No necesitas adjuntar nada manualmente.
+                  </p>
+                </StepCard>
 
-              {/* 3 — Adjuntar contexto */}
-              <StepCard step={3} title='Adjuntar archivos de contexto al chat'>
-                <p className="text-xs text-muted-foreground">
-                  En el chat de Cursor usa <span className="font-mono bg-muted px-1 rounded">@</span> para adjuntar archivos. Añade estos tres en cada sesión de trabajo:
-                </p>
-                <div className="overflow-hidden rounded-xl border text-xs">
-                  <div className="grid grid-cols-[auto_1fr] bg-muted px-4 py-2 font-medium text-muted-foreground uppercase tracking-widest gap-x-4">
-                    <span>Archivo</span>
-                    <span>Para qué sirve</span>
-                  </div>
-                  {[
-                    ["@CLAUDE.md",                          "Reglas del proyecto, convenciones y restricciones que debe respetar la IA"],
-                    ["@design.md",                         "Tokens de color, tipografía y radios — referencia visual del sistema"],
-                    ["@.claude/skills/shadcn/SKILL.md",    "Contexto de shadcn/base-ui: cómo instalar componentes, el patrón render vs asChild y reglas de composición"],
-                  ].map(([file, desc]) => (
-                    <div key={file} className="grid grid-cols-[auto_1fr] items-start gap-x-4 border-t px-4 py-2.5 odd:bg-card even:bg-muted/20">
-                      <span className="font-mono text-foreground whitespace-nowrap">{file}</span>
-                      <span className="text-muted-foreground">{desc}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-foreground">Nota:</span>{" "}
-                  <span className="font-mono bg-muted px-1 rounded">.claude/skills/</span> está rastreado en git — todos los que clonen el repo lo tendrán.
-                  El resto de <span className="font-mono bg-muted px-1 rounded">.claude/</span> (memoria personal, settings) está en <span className="font-mono bg-muted px-1 rounded">.gitignore</span>.
-                </p>
-              </StepCard>
+                <StepCard step={3} title="El skill de shadcn se activa solo">
+                  <p className="text-xs text-muted-foreground">
+                    Al detectar <span className="font-mono bg-muted px-1 rounded">components.json</span> en la raíz, Claude Code carga el skill de shadcn/base-ui automáticamente. Incluye las reglas de composición, el patrón <span className="font-mono bg-muted px-1 rounded">render</span> en lugar de <span className="font-mono bg-muted px-1 rounded">asChild</span>, y las convenciones de tokens del sistema.
+                  </p>
+                </StepCard>
 
-              {/* 4 — Prompt de ejemplo */}
-              <StepCard step={4} title="Prompt de ejemplo para empezar a construir">
-                <p className="text-xs text-muted-foreground">
-                  Con los tres archivos adjuntos, usa un prompt como este para arrancar una nueva feature:
-                </p>
-                <CodeBlock code={`Quiero crear una nueva página en /app/conductores que muestre
-una tabla de conductores con columnas: ID, nombre, unidad asignada
-y estado (activo / inactivo / vacaciones).
-
-Usa los componentes del design system (Table, Badge, Card).
-Sigue las convenciones de CLAUDE.md y los tokens de design.md.
-Los datos por ahora son un array estático en el mismo archivo.`} />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Cuanto más específico el prompt (componentes, estructura de datos, ruta), mejor será el resultado.
-                </p>
-              </StepCard>
+                <StepCard step={4} title="Prompt de ejemplo">
+                  <CodeBlock code={`Crea una nueva página en /app/conductores con una tabla
+de conductores (ID, nombre, unidad asignada, estado).
+Usa Table, Badge y Card del design system.`} />
+                </StepCard>
+              </div>
             </div>
 
-            {/* Diferencias vs Claude Code */}
+            <div className="border-t" />
+
+            {/* ── Con Cursor ── */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold">Con Cursor</h3>
+              <p className="text-xs text-muted-foreground">
+                Cursor es un editor basado en VS Code con IA integrada. No lee los archivos de configuración automáticamente — debes adjuntarlos manualmente en cada chat con <span className="font-mono bg-muted px-1 rounded">@</span>.
+              </p>
+              <div className="space-y-6">
+                <StepCard step={1} title="Clonar el repositorio e instalar dependencias">
+                  <CodeBlock code={`git clone https://github.com/<org>/motor-de-traccion.git
+cd motor-de-traccion
+npm install`} />
+                </StepCard>
+
+                <StepCard step={2} title="Abrir la carpeta en Cursor">
+                  <CodeBlock code={`cursor .`} />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    O desde el editor: <strong>File → Open Folder</strong> y selecciona la raíz del proyecto.
+                  </p>
+                </StepCard>
+
+                <StepCard step={3} title="Adjuntar el contexto al chat en cada sesión">
+                  <p className="text-xs text-muted-foreground">
+                    Usa <span className="font-mono bg-muted px-1 rounded">@</span> en el chat de Cursor para adjuntar estos dos archivos:
+                  </p>
+                  <div className="overflow-hidden rounded-xl border text-xs">
+                    <div className="grid grid-cols-[auto_1fr] bg-muted px-4 py-2 font-medium text-muted-foreground uppercase tracking-widest gap-x-4">
+                      <span>Archivo</span>
+                      <span>Para qué sirve</span>
+                    </div>
+                    {[
+                      ["@CLAUDE.md",   "Reglas del proyecto, convenciones y restricciones que debe respetar la IA"],
+                      ["@design.md",  "Tokens de color, tipografía y radios — referencia visual del sistema"],
+                    ].map(([file, desc]) => (
+                      <div key={file} className="grid grid-cols-[auto_1fr] items-start gap-x-4 border-t px-4 py-2.5 odd:bg-card even:bg-muted/20">
+                        <span className="font-mono text-foreground whitespace-nowrap">{file}</span>
+                        <span className="text-muted-foreground">{desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </StepCard>
+
+                <StepCard step={4} title="Prompt de ejemplo">
+                  <CodeBlock code={`Crea una nueva página en /app/conductores con una tabla
+de conductores (ID, nombre, unidad asignada, estado).
+Usa Table, Badge y Card del design system.
+Sigue las convenciones de CLAUDE.md y los tokens de design.md.`} />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Cuanto más específico el prompt (componentes, ruta, estructura de datos), mejor el resultado.
+                  </p>
+                </StepCard>
+              </div>
+            </div>
+
+            <div className="border-t" />
+
+            {/* ── Comparativa ── */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold">Diferencias vs Claude Code</h3>
+              <h3 className="text-sm font-semibold">¿Cuándo usar cada uno?</h3>
               <div className="overflow-hidden rounded-xl border text-sm">
                 <div className="grid grid-cols-3 bg-muted px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-widest">
-                  <span>Capacidad</span>
+                  <span>Situación</span>
                   <span>Claude Code</span>
                   <span>Cursor</span>
                 </div>
                 {([
-                  [
-                    "Contexto del proyecto",
-                    "Lee CLAUDE.md, AGENTS.md y archivos automáticamente",
-                    "Debes adjuntar los archivos manualmente con @",
-                  ],
-                  [
-                    "Skills / reglas de shadcn",
-                    "El skill se activa solo cuando detecta components.json",
-                    "Adjunta @.claude/skills/shadcn/SKILL.md manualmente",
-                  ],
-                  [
-                    "Memoria entre sesiones",
-                    "Persiste en .claude/memory/ — recuerda decisiones pasadas",
-                    "Sin memoria entre sesiones, el contexto es por chat",
-                  ],
-                  [
-                    "Ejecución de comandos",
-                    "Corre npm, git y cualquier comando de terminal directamente",
-                    "Propone comandos; los ejecutas tú en la terminal integrada",
-                  ],
-                  [
-                    "Edición de archivos",
-                    "Lee y edita archivos del repo de forma autónoma",
-                    "Edita inline en el editor; puedes aceptar o rechazar por bloque",
-                  ],
-                  [
-                    "Agentes / tareas largas",
-                    "Puede encadenar pasos largos con autonomía",
-                    "Mejor para ediciones puntuales; agentes más limitados",
-                  ],
-                ] as const).map(([cap, claude, cursor], i) => (
+                  ["Contexto del proyecto",    "Automático — lee CLAUDE.md y AGENTS.md al arrancar",        "Manual — adjunta @CLAUDE.md y @design.md en cada chat"],
+                  ["Skill de shadcn",          "Se activa solo al detectar components.json",                "No aplica — las reglas van en el prompt o en @CLAUDE.md"],
+                  ["Tareas largas",            "Ideal — puede encadenar pasos con autonomía",               "Limitado — mejor para ediciones puntuales"],
+                  ["Revisión de cambios",      "Apruebas herramienta por herramienta en la CLI",            "Aceptas o rechazas cada bloque directamente en el editor"],
+                  ["Ejecución de comandos",    "Corre npm, git y terminal de forma autónoma",               "Propone comandos; los ejecutas tú en la terminal integrada"],
+                  ["Memoria entre sesiones",   "Persiste en .claude/memory/ — recuerda decisiones pasadas", "Sin memoria — el contexto empieza de cero en cada chat"],
+                ] as const).map(([sit, cc, cur], i) => (
                   <div
-                    key={cap}
+                    key={sit}
                     className={`grid grid-cols-3 gap-x-4 border-t px-4 py-2.5 text-xs ${i % 2 === 0 ? "bg-card" : "bg-muted/20"}`}
                   >
-                    <span className="font-medium text-foreground">{cap}</span>
-                    <span className="text-muted-foreground">{claude}</span>
-                    <span className="text-muted-foreground">{cursor}</span>
+                    <span className="font-medium text-foreground">{sit}</span>
+                    <span className="text-muted-foreground">{cc}</span>
+                    <span className="text-muted-foreground">{cur}</span>
                   </div>
                 ))}
               </div>
-            </div>
 
-            <Card className="border-primary/20 bg-primary/5">
-              <CardContent className="pt-4">
-                <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-foreground">Recomendación:</span>{" "}
-                  Usa <strong>Claude Code</strong> para tareas largas de construcción (nuevas páginas, refactors, setup inicial).
-                  Usa <strong>Cursor</strong> para ediciones rápidas puntuales o si prefieres ver los cambios inline antes de aceptarlos.
-                  Ambos leen el mismo codebase — no son excluyentes.
-                </p>
-              </CardContent>
-            </Card>
+              <Card className="border-primary/20 bg-primary/5">
+                <CardContent className="pt-4">
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">Recomendación:</span>{" "}
+                    Usa <strong>Claude Code</strong> para construir features completas, refactors y tareas que requieren varios pasos.
+                    Usa <strong>Cursor</strong> cuando prefieras ver y aprobar los cambios inline en el editor.
+                    Ambos leen el mismo codebase — no son excluyentes.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </Section>
 
         </div>
