@@ -24,8 +24,12 @@
 .DS_Store
 *.pem
 
-# Claude Code internal files
-.claude/
+# Claude Code — ignorar memoria local y settings personales
+.claude/memory/
+.claude/settings.json
+.claude/settings.local.json
+.claude/todos.json
+# .claude/skills/ SÍ se rastrea para que el equipo comparta el contexto
 
 # Finder duplicates / accidental copies
 components\ 2.json
