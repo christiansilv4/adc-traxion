@@ -14,6 +14,10 @@
 - No agregar `px-*` / `py-*` de layout en el root de una página del workspace ni importar `SidebarProvider`, `AppSidebar`, `SidebarInset` o `SiteHeader` dentro de ellas.
 - Referencia canónica de layout: `components/adc-traxion/workspace-shell.tsx`.
 
+# Flujo de trabajo
+
+- Al terminar un ajuste relevante (patrón, convención, decisión de arquitectura o diseño), preguntar **antes del commit** si se documenta. Si la respuesta es sí, actualizar `CLAUDE.md` y/o memoria, y commitear todo junto.
+
 # Convenciones de componentes
 
 - **KPI cards:** usar siempre `<SectionCards periodo={...} />` (`components/adc-traxion/section-cards.tsx`) salvo que se pida explícitamente algo diferente.
