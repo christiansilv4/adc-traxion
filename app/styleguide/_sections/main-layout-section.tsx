@@ -6,6 +6,10 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/adc-traxion/app-sidebar"
 import { SiteHeader } from "@/components/adc-traxion/site-header"
 import { cn } from "@/lib/utils"
+import { WorkspaceProvider } from "@/contexts/workspace-context"
+import { getWorkspace } from "@/lib/workspaces"
+
+const demoWorkspace = getWorkspace("motor-traccion")!
 
 // DemoFrame: overflow-hidden clips the SidebarProvider's min-h-svh.
 // collapsible="none" (passed to AppSidebar) renders Sidebar as inline flex div.
@@ -71,24 +75,26 @@ export default function DashboardPage() {
         previewClassName="p-0"
       >
         <DemoFrame className="h-[460px]">
-          <SidebarProvider
-            style={{
-              "--sidebar-width":  "calc(var(--spacing) * 72)",
-              "--header-height":  "calc(var(--spacing) * 12)",
-              minHeight: 0,
-              height: "100%",
-            } as React.CSSProperties}
-          >
-            <AppSidebar variant="inset" collapsible="none" />
-            <SidebarInset>
-              <SiteHeader />
-              <div className="p-6 space-y-3">
-                {[75, 55, 80, 60, 70, 50, 65].map((w, i) => (
-                  <div key={i} className="h-2.5 rounded bg-muted" style={{ width: `${w}%` }} />
-                ))}
-              </div>
-            </SidebarInset>
-          </SidebarProvider>
+          <WorkspaceProvider workspace={demoWorkspace}>
+            <SidebarProvider
+              style={{
+                "--sidebar-width":  "calc(var(--spacing) * 72)",
+                "--header-height":  "calc(var(--spacing) * 12)",
+                minHeight: 0,
+                height: "100%",
+              } as React.CSSProperties}
+            >
+              <AppSidebar variant="inset" collapsible="none" />
+              <SidebarInset>
+                <SiteHeader />
+                <div className="p-6 space-y-3">
+                  {[75, 55, 80, 60, 70, 50, 65].map((w, i) => (
+                    <div key={i} className="h-2.5 rounded bg-muted" style={{ width: `${w}%` }} />
+                  ))}
+                </div>
+              </SidebarInset>
+            </SidebarProvider>
+          </WorkspaceProvider>
         </DemoFrame>
       </ComponentDemo>
 
@@ -128,24 +134,26 @@ export function SiteHeader() {
         previewClassName="p-0"
       >
         <DemoFrame className="h-[460px]">
-          <SidebarProvider
-            style={{
-              "--sidebar-width":  "calc(var(--spacing) * 72)",
-              "--header-height":  "calc(var(--spacing) * 12)",
-              minHeight: 0,
-              height: "100%",
-            } as React.CSSProperties}
-          >
-            <AppSidebar variant="inset" collapsible="none" />
-            <SidebarInset>
-              <SiteHeader />
-              <div className="p-6 space-y-3">
-                {[75, 55, 80, 60, 70, 50, 65].map((w, i) => (
-                  <div key={i} className="h-2.5 rounded bg-muted" style={{ width: `${w}%` }} />
-                ))}
-              </div>
-            </SidebarInset>
-          </SidebarProvider>
+          <WorkspaceProvider workspace={demoWorkspace}>
+            <SidebarProvider
+              style={{
+                "--sidebar-width":  "calc(var(--spacing) * 72)",
+                "--header-height":  "calc(var(--spacing) * 12)",
+                minHeight: 0,
+                height: "100%",
+              } as React.CSSProperties}
+            >
+              <AppSidebar variant="inset" collapsible="none" />
+              <SidebarInset>
+                <SiteHeader />
+                <div className="p-6 space-y-3">
+                  {[75, 55, 80, 60, 70, 50, 65].map((w, i) => (
+                    <div key={i} className="h-2.5 rounded bg-muted" style={{ width: `${w}%` }} />
+                  ))}
+                </div>
+              </SidebarInset>
+            </SidebarProvider>
+          </WorkspaceProvider>
         </DemoFrame>
       </ComponentDemo>
 

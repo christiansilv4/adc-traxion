@@ -55,7 +55,7 @@ export function SectionCards({ periodo }: { periodo: KpiPeriodo }) {
   const k = kpiData[periodo]
 
   return (
-    <div className="*:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-muted *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs grid grid-cols-1 gap-4 px-3 iphone-se:px-4 iphone-pro:px-5 ipad-air:px-10 ipad-pro:px-16 xl:px-24 2xl:px-40 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="*:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-muted *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
 
       {/* Unidades vendidas */}
       <Card className="@container/card">
