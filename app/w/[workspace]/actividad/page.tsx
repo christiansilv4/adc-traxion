@@ -12,16 +12,20 @@ import {
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
 
@@ -71,7 +75,6 @@ function FilterDropdown<T extends string>({
   options,
   selected,
   onToggle,
-  onClear,
   renderLabel,
 }: {
   label: string
@@ -83,36 +86,34 @@ function FilterDropdown<T extends string>({
 }) {
   const count = selected.size
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-8 gap-1.5 text-sm font-normal")}>
+    <Popover>
+      <PopoverTrigger
+        render={
+          <Button variant="outline" size="sm" className="h-8 gap-1.5 text-sm font-normal" />
+        }
+      >
         {label}
         {count > 0 && (
-          <Badge className="rounded-full px-1.5 text-[10px]">{count}</Badge>
+          <Badge variant="secondary" className="rounded-sm px-1 font-normal">{count}</Badge>
         )}
         <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-52">
-        <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">{label}</div>
-        <DropdownMenuSeparator />
-        {options.map(v => (
-          <DropdownMenuCheckboxItem
-            key={v}
-            checked={selected.has(v)}
-            onCheckedChange={() => onToggle(v)}
-          >
-            {renderLabel(v)}
-          </DropdownMenuCheckboxItem>
-        ))}
-        {count > 0 && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onClear} className="text-xs text-muted-foreground">
-              Limpiar selección
-            </DropdownMenuItem>
-          </>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-52 p-1">
+        <div className="flex flex-col">
+          {options.map(v => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => onToggle(v)}
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted text-left"
+            >
+              <Checkbox checked={selected.has(v)} className="pointer-events-none" />
+              {renderLabel(v)}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 

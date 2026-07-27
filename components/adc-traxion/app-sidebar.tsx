@@ -77,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       icon: <ActivityIcon />,
       items: [
         { title: "Feed",       url: `/w/${workspace.id}/actividad` },
-        { title: "Calendario", url: "#" },
+        { title: "Calendario", url: `/w/${workspace.id}/calendario` },
       ],
     },
     {
