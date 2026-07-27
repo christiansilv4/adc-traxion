@@ -18,6 +18,12 @@
 
 - Al terminar un ajuste relevante (patrón, convención, decisión de arquitectura o diseño), preguntar **antes del commit** si se documenta. Si la respuesta es sí, actualizar `CLAUDE.md` y/o memoria, y commitear todo junto.
 
+# Colores de eventos de calendario
+
+- Usar `--cal-blue`, `--cal-teal`, `--cal-green`, `--cal-amber`, `--cal-orange`, `--cal-red`, `--cal-pink`, `--cal-purple` para colorear eventos del calendario. Definidos en `styles/globals.css` con valores light y dark.
+- Para variantes con opacidad usar `color-mix(in oklch, var(--cal-X) 18%, transparent)` — NO usar `hsl(var(--cal-X) / 0.18)` ya que las variables están en oklch.
+- NO usar `--chart-*` para eventos de calendario; esos son todos azules y no diferenciados.
+
 # Convenciones de componentes
 
 - **KPI cards:** usar siempre `<SectionCards periodo={...} />` (`components/adc-traxion/section-cards.tsx`) salvo que se pida explícitamente algo diferente.
