@@ -1,5 +1,11 @@
 # Design System — ADC Traxión
 
+## Package name
+
+Published/consumed as **`@adc/traxion-ui`** (see [docs/CONSUMING.md](./docs/CONSUMING.md)).
+
+App teams import components; they do not copy this repo into their codebase.
+
 ## Cliente
 
 - **Nombre:** ADC Traxión
